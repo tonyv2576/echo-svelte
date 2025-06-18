@@ -89,7 +89,7 @@ func (p *ProjectConfig) ApplyDefaults() error {
 }
 
 func (p *ProjectConfig) Validate() error {
-	if len(p.Name) <= 0 {
+	if len(p.Name) <= 0 && p.Directory != "./" {
 		return doErr("project name is required")
 	}
 
@@ -109,6 +109,9 @@ func (p *ProjectConfig) Validate() error {
 			loc = path.Join(loc, p.Directory)
 		}
 		p.Directory = loc
+		if len(p.Name) <= 0 {
+			p.Name = path.Base(loc)
+		}
 		return p.CreateDirectory()
 	}
 
